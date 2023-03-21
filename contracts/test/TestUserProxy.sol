@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "../UserProxy.sol";
 import "../interfaces/IWETH.sol";
@@ -13,11 +13,10 @@ contract TestUserProxy is UserProxy {
     ) UserProxy(IWETH(_weth), _trancheFactory, _trancheBytecodeHash) {} // solhint-disable-line no-empty-blocks
 
     // solhint-disable-next-line private-vars-leading-underscore
-    function deriveTranche(address position, uint256 expiration)
-        public
-        view
-        returns (ITranche)
-    {
+    function deriveTranche(
+        address position,
+        uint256 expiration
+    ) public view returns (ITranche) {
         return _deriveTranche(position, expiration);
     }
 }

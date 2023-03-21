@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "../WrappedPosition.sol";
 import "./TestERC20.sol";
@@ -7,9 +7,9 @@ import "./TestERC20.sol";
 contract TestWrappedPosition is WrappedPosition {
     uint256 public underlyingUnitValue = 100;
 
-    constructor(IERC20 _token)
-        WrappedPosition(_token, "ELement Finance", "TestWrappedPosition")
-    {} // solhint-disable-line no-empty-blocks
+    constructor(
+        IERC20 _token
+    ) WrappedPosition(_token, "ELement Finance", "TestWrappedPosition") {} // solhint-disable-line no-empty-blocks
 
     function _deposit() internal override returns (uint256, uint256) {
         // Check how much was deposited
@@ -40,12 +40,9 @@ contract TestWrappedPosition is WrappedPosition {
         underlyingUnitValue = _value;
     }
 
-    function _underlying(uint256 _shares)
-        internal
-        view
-        override
-        returns (uint256)
-    {
+    function _underlying(
+        uint256 _shares
+    ) internal view override returns (uint256) {
         return _shares * underlyingUnitValue;
     }
 }

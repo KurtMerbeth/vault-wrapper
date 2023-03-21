@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity 0.8.0;
+pragma solidity 0.8.1;
 
 import { ERC20PermitWithSupply, ERC20Permit, IERC20Permit } from "../../libraries/ERC20PermitWithSupply.sol";
 import { IWrappedPosition } from "../../interfaces/IWrappedPosition.sol";
@@ -76,11 +76,9 @@ contract WrappedCoveredPrincipalToken is
     }
 
     ///@notice Allows to create the name for the wrapped token.
-    function _processName(string memory _tokenSymbol)
-        internal
-        pure
-        returns (string memory)
-    {
+    function _processName(
+        string memory _tokenSymbol
+    ) internal pure returns (string memory) {
         return
             string(
                 abi.encodePacked("Wrapped", _tokenSymbol, "Covered Principal")
@@ -88,11 +86,9 @@ contract WrappedCoveredPrincipalToken is
     }
 
     ///@notice Allows to create the symbol for the wrapped token.
-    function _processSymbol(string memory _tokenSymbol)
-        internal
-        pure
-        returns (string memory)
-    {
+    function _processSymbol(
+        string memory _tokenSymbol
+    ) internal pure returns (string memory) {
         return string(abi.encodePacked("W", _tokenSymbol));
     }
 
@@ -101,12 +97,9 @@ contract WrappedCoveredPrincipalToken is
     ///         wrapped position which has underlying token equals to the base token are
     ///         only allowed to add, Otherwise it will revert.
     /// @param  _wrappedPosition Address of the Wrapped position which needs to add.
-    function addWrappedPosition(address _wrappedPosition)
-        external
-        override
-        isValidWp(_wrappedPosition)
-        onlyRole(ADMIN_ROLE)
-    {
+    function addWrappedPosition(
+        address _wrappedPosition
+    ) external override isValidWp(_wrappedPosition) onlyRole(ADMIN_ROLE) {
         require(
             address(IWrappedPosition(_wrappedPosition).token()) == baseToken,
             "WFP:INVALID_WP"
@@ -149,12 +142,9 @@ contract WrappedCoveredPrincipalToken is
     /// @notice Tell whether the given `_wrappedPosition` is whitelisted or not.
     /// @param  _wrappedPosition Address of the wrapped position.
     /// @return returns boolean, True -> allowed otherwise false.
-    function isAllowedWp(address _wrappedPosition)
-        public
-        view
-        override
-        returns (bool)
-    {
+    function isAllowedWp(
+        address _wrappedPosition
+    ) public view override returns (bool) {
         return _allowedWrappedPositions.contains(_wrappedPosition);
     }
 
@@ -204,12 +194,11 @@ contract WrappedCoveredPrincipalToken is
     }
 
     /// @notice Converts the decimal precision of given `_amount` to `_tranche` decimal.
-    function _fromWad(uint256 _amount, address _tranche)
-        internal
-        view
-        returns (uint256)
-    {
-        return (_amount * 10**IERC20Metadata(_tranche).decimals()) / 1e18;
+    function _fromWad(
+        uint256 _amount,
+        address _tranche
+    ) internal view returns (uint256) {
+        return (_amount * 10 ** IERC20Metadata(_tranche).decimals()) / 1e18;
     }
 
     /// @dev This internal function produces the deterministic create2
@@ -217,11 +206,10 @@ contract WrappedCoveredPrincipalToken is
     /// @param _position The wrapped position contract address
     /// @param _expiration The expiration time of the tranche
     /// @return The derived Tranche contract
-    function _deriveTranche(address _position, uint256 _expiration)
-        internal
-        view
-        returns (ITranche)
-    {
+    function _deriveTranche(
+        address _position,
+        uint256 _expiration
+    ) internal view returns (ITranche) {
         bytes32 salt = keccak256(abi.encodePacked(_position, _expiration));
         bytes32 addressBytes = keccak256(
             abi.encodePacked(

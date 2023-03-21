@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "./interfaces/IERC20.sol";
 import "./interfaces/IERC20Permit.sol";
@@ -226,10 +226,10 @@ contract UserProxy is Authorizable {
     /// @param _expiration The tranche expiration time
     /// @param _position The contract which interacts with the yield bearing strategy
     /// @return the principal token yield token returned
-    function _mint(uint256 _expiration, address _position)
-        internal
-        returns (uint256, uint256)
-    {
+    function _mint(
+        uint256 _expiration,
+        address _position
+    ) internal returns (uint256, uint256) {
         // Use create2 to derive the tranche contract
         ITranche tranche = _deriveTranche(address(_position), _expiration);
         // Move funds into the Tranche contract
@@ -242,12 +242,10 @@ contract UserProxy is Authorizable {
     /// @param _position The wrapped position contract address
     /// @param _expiration The expiration time of the tranche
     /// @return The derived Tranche contract
-    function _deriveTranche(address _position, uint256 _expiration)
-        internal
-        view
-        virtual
-        returns (ITranche)
-    {
+    function _deriveTranche(
+        address _position,
+        uint256 _expiration
+    ) internal view virtual returns (ITranche) {
         bytes32 salt = keccak256(abi.encodePacked(_position, _expiration));
         bytes32 addressBytes = keccak256(
             abi.encodePacked(

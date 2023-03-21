@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.1;
 
 import "./interfaces/IERC20.sol";
 import "./WrappedPosition.sol";
@@ -109,12 +109,9 @@ contract CompoundAssetProxy is WrappedPosition, Authorizable {
     /// @notice Get the underlying amount of tokens per shares given
     /// @param _amount The amount of shares you want to know the value of
     /// @return Value of shares in underlying token
-    function _underlying(uint256 _amount)
-        internal
-        view
-        override
-        returns (uint256)
-    {
+    function _underlying(
+        uint256 _amount
+    ) internal view override returns (uint256) {
         // Load exchange rate
         uint256 exchangeRate = ctoken.exchangeRateStored();
 
@@ -123,7 +120,7 @@ contract CompoundAssetProxy is WrappedPosition, Authorizable {
         uint256 mantissa = 18 + underlyingDecimals - 8;
 
         // Multiply _amount by exchange rate & correct for decimals
-        return ((_amount * exchangeRate) / (10**mantissa));
+        return ((_amount * exchangeRate) / (10 ** mantissa));
     }
 
     /// @notice Collect the comp rewards accrued

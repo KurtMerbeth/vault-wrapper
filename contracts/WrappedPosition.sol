@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "./interfaces/IERC20.sol";
 import "./interfaces/IWETH.sol";
@@ -50,24 +50,18 @@ abstract contract WrappedPosition is ERC20Permit, IWrappedPosition {
     /// @notice Get the underlying balance of an address
     /// @param _who The address to query
     /// @return The underlying token balance of the address
-    function balanceOfUnderlying(address _who)
-        external
-        view
-        override
-        returns (uint256)
-    {
+    function balanceOfUnderlying(
+        address _who
+    ) external view override returns (uint256) {
         return _underlying(balanceOf[_who]);
     }
 
     /// @notice Returns the amount of the underlying asset a certain amount of shares is worth
     /// @param _shares Shares to calculate underlying value for
     /// @return The value of underlying assets for the given shares
-    function getSharesToUnderlying(uint256 _shares)
-        external
-        view
-        override
-        returns (uint256)
-    {
+    function getSharesToUnderlying(
+        uint256 _shares
+    ) external view override returns (uint256) {
         return _underlying(_shares);
     }
 
@@ -77,11 +71,10 @@ abstract contract WrappedPosition is ERC20Permit, IWrappedPosition {
     /// @param _amount The amount of underlying tokens to deposit
     /// @param _destination The address to mint to
     /// @return Returns the number of Wrapped Position tokens minted
-    function deposit(address _destination, uint256 _amount)
-        external
-        override
-        returns (uint256)
-    {
+    function deposit(
+        address _destination,
+        uint256 _amount
+    ) public virtual override returns (uint256) {
         // Send tokens to the proxy
         token.transferFrom(msg.sender, address(this), _amount);
         // Calls our internal deposit function
@@ -98,15 +91,9 @@ abstract contract WrappedPosition is ERC20Permit, IWrappedPosition {
     ///                  senders WP balance before mint)
     /// @dev WARNING - The call which funds this method MUST be in the same transaction
     //                 as the call to this method or you risk loss of funds
-    function prefundedDeposit(address _destination)
-        external
-        override
-        returns (
-            uint256,
-            uint256,
-            uint256
-        )
-    {
+    function prefundedDeposit(
+        address _destination
+    ) external override returns (uint256, uint256, uint256) {
         // Calls our internal deposit function
         (uint256 shares, uint256 usedUnderlying) = _deposit();
 
@@ -126,7 +113,7 @@ abstract contract WrappedPosition is ERC20Permit, IWrappedPosition {
         address _destination,
         uint256 _shares,
         uint256 _minUnderlying
-    ) public override returns (uint256) {
+    ) public virtual override returns (uint256) {
         return _positionWithdraw(_destination, _shares, _minUnderlying, 0);
     }
 
@@ -142,7 +129,7 @@ abstract contract WrappedPosition is ERC20Permit, IWrappedPosition {
         uint256 _minUnderlying
     ) external override returns (uint256, uint256) {
         // First we load the number of underlying per unit of Wrapped Position token
-        uint256 oneUnit = 10**decimals;
+        uint256 oneUnit = 10 ** decimals;
         uint256 underlyingPerShare = _underlying(oneUnit);
         // Then we calculate the number of shares we need
         uint256 shares = (_amount * oneUnit) / underlyingPerShare;
@@ -168,7 +155,7 @@ abstract contract WrappedPosition is ERC20Permit, IWrappedPosition {
         uint256 _shares,
         uint256 _minUnderlying,
         uint256 _underlyingPerShare
-    ) internal returns (uint256) {
+    ) internal virtual returns (uint256) {
         // Burn users shares
         _burn(msg.sender, _shares);
 

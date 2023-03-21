@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "./libraries/ERC20Permit.sol";
 import "./libraries/DateString.sol";
@@ -88,22 +88,20 @@ contract InterestToken is ERC20Permit, IInterestToken {
     /// @dev Mints tokens to an address
     /// @param _account The account to mint to
     /// @param _amount The amount to mint
-    function mint(address _account, uint256 _amount)
-        external
-        override
-        onlyMintAuthority
-    {
+    function mint(
+        address _account,
+        uint256 _amount
+    ) external override onlyMintAuthority {
         _mint(_account, _amount);
     }
 
     /// @dev Burns tokens from an address
     /// @param _account The account to burn from
     /// @param _amount The amount of token to burn
-    function burn(address _account, uint256 _amount)
-        external
-        override
-        onlyMintAuthority
-    {
+    function burn(
+        address _account,
+        uint256 _amount
+    ) external override onlyMintAuthority {
         _burn(_account, _amount);
     }
 }

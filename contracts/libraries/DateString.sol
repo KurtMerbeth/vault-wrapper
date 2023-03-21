@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 library DateString {
     uint256 public constant SECONDS_PER_DAY = 24 * 60 * 60;
@@ -26,15 +26,9 @@ library DateString {
     // year = 100 * (N - 49) + year + L
     // ------------------------------------------------------------------------
     // solhint-disable-next-line private-vars-leading-underscore
-    function _daysToDate(uint256 _days)
-        internal
-        pure
-        returns (
-            uint256 year,
-            uint256 month,
-            uint256 day
-        )
-    {
+    function _daysToDate(
+        uint256 _days
+    ) internal pure returns (uint256 year, uint256 month, uint256 day) {
         int256 __days = int256(_days);
         // solhint-disable-next-line var-name-mixedcase
         int256 L = __days + 68569 + OFFSET19700101;

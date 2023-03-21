@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "./TestYVault.sol";
 
@@ -9,9 +9,10 @@ import "./TestYVault.sol";
 //        The subtly of 0.3.2 - 0.3.5 yearn vaults is tested in the mainnet tests.
 
 contract TestYVaultV4 is TestYVault {
-    constructor(address _token, uint8 _decimals)
-        TestYVault(_token, _decimals)
-    {}
+    constructor(
+        address _token,
+        uint8 _decimals
+    ) TestYVault(_token, _decimals) {}
 
     function apiVersion() external pure override returns (string memory) {
         return ("0.4.2");

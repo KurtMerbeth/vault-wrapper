@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity 0.8.0;
+pragma solidity 0.8.1;
 
 import { WrappedCoveredPrincipalToken, EnumerableSet } from "./WrappedCoveredPrincipalToken.sol";
 
@@ -34,10 +34,10 @@ contract WrappedCoveredPrincipalTokenFactory {
     /// @param  _baseToken Address of the base token / underlying token that is used to buy the wrapped positions.
     /// @param  _owner Address of the owner of wrapped futures.
     /// @return address of wrapped futures token.
-    function create(address _baseToken, address _owner)
-        external
-        returns (address)
-    {
+    function create(
+        address _baseToken,
+        address _owner
+    ) external returns (address) {
         // Validate the given params
         _zeroAddressCheck(_owner);
         _zeroAddressCheck(_baseToken);

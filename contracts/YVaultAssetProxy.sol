@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "./interfaces/IERC20.sol";
 import "./interfaces/IYearnVault.sol";
@@ -91,7 +91,7 @@ contract YVaultAssetProxy is WrappedPosition, Authorizable {
         uint256 _shares,
         address _destination,
         uint256
-    ) internal override notPaused returns (uint256) {
+    ) internal virtual override notPaused returns (uint256) {
         // If the conversion rate is non-zero we have upgraded and so our wrapped shares are
         // not one to one with the original shares.
         if (conversionRate != 0) {
@@ -99,6 +99,7 @@ contract YVaultAssetProxy is WrappedPosition, Authorizable {
             // wrapped position shares by it because they are equivalent to the first yearn vault shares
             _shares = (_shares * 1e18) / conversionRate;
         }
+
         // Withdraws shares from the vault. Max loss is set at 100% as
         // the minimum output value is enforced by the calling
         // function in the WrappedPosition contract.
@@ -111,18 +112,15 @@ contract YVaultAssetProxy is WrappedPosition, Authorizable {
     /// @notice Get the underlying amount of tokens per shares given
     /// @param _amount The amount of shares you want to know the value of
     /// @return Value of shares in underlying token
-    function _underlying(uint256 _amount)
-        internal
-        view
-        override
-        returns (uint256)
-    {
+    function _underlying(
+        uint256 _amount
+    ) internal view virtual override returns (uint256) {
         // We may have to convert before using the vault price per share
         if (conversionRate != 0) {
             // Imitate the _withdraw logic and convert this amount to yearn vault2 shares
             _amount = (_amount * 1e18) / conversionRate;
         }
-        return (_amount * _pricePerShare()) / (10**vaultDecimals);
+        return (_amount * _pricePerShare()) / (10 ** vaultDecimals);
     }
 
     /// @notice Get the price per share in the vault
@@ -150,10 +148,10 @@ contract YVaultAssetProxy is WrappedPosition, Authorizable {
     /// @dev WARNING - This function has the capacity to steal all user funds from this
     ///                contract and so it should be ensured that the owner is a high quorum
     ///                governance vote through the time lock.
-    function transition(IYearnVault newVault, uint256 minOutputShares)
-        external
-        onlyOwner
-    {
+    function transition(
+        IYearnVault newVault,
+        uint256 minOutputShares
+    ) external onlyOwner {
         // Load the current vault's price per share
         uint256 currentPricePerShare = _pricePerShare();
         // Load the new vault's price per share

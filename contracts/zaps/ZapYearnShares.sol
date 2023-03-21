@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "../interfaces/IYearnVault.sol";
 import "../libraries/Authorizable.sol";
@@ -17,9 +17,10 @@ contract ZapYearnShares is Authorizable {
 
     /// @param __trancheFactory Address of the TrancheFactory contract
     /// @param __trancheBytecodeHash Hash of the Tranche bytecode.
-    constructor(address __trancheFactory, bytes32 __trancheBytecodeHash)
-        Authorizable()
-    {
+    constructor(
+        address __trancheFactory,
+        bytes32 __trancheBytecodeHash
+    ) Authorizable() {
         _authorize(msg.sender);
         _trancheFactory = __trancheFactory;
         _trancheBytecodeHash = __trancheBytecodeHash;
@@ -73,12 +74,10 @@ contract ZapYearnShares is Authorizable {
     /// @param _position The wrapped position contract address
     /// @param _expiration The expiration time of the tranche
     /// @return The derived Tranche contract
-    function _deriveTranche(address _position, uint256 _expiration)
-        internal
-        view
-        virtual
-        returns (ITranche)
-    {
+    function _deriveTranche(
+        address _position,
+        uint256 _expiration
+    ) internal view virtual returns (ITranche) {
         bytes32 salt = keccak256(abi.encodePacked(_position, _expiration));
         bytes32 addressBytes = keccak256(
             abi.encodePacked(

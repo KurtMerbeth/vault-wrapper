@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.7.0;
 
-import "../balancer-core-v2/pools/factories/BasePoolFactory.sol";
+import "../balancer-core-v2/contracts/pools/factories/BasePoolFactory.sol";
 import "../libraries/Authorizable.sol";
 import "../ConvergentCurvePool.sol";
 
@@ -23,10 +23,10 @@ contract ConvergentPoolFactory is BasePoolFactory, Authorizable {
     /// @notice This function constructs the pool
     /// @param _vault The balancer v2 vault
     /// @param _governance The governance address
-    constructor(IVault _vault, address _governance)
-        BasePoolFactory(_vault)
-        Authorizable()
-    {
+    constructor(
+        IVault _vault,
+        address _governance
+    ) BasePoolFactory(_vault) Authorizable() {
         // Sets the governance address as owner and authorized
         _authorize(_governance);
         setOwner(_governance);

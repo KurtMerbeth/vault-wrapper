@@ -11,12 +11,6 @@ import { HardhatUserConfig } from "hardhat/config";
 
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
-  typechain: {
-    outDir: "typechain/",
-    target: "ethers-v5",
-    alwaysGenerateOverloads: true,
-    externalArtifacts: ["externalArtifacts/*.json"],
-  },
   solidity: {
     compilers: [
       {
@@ -24,22 +18,31 @@ const config: HardhatUserConfig = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 10000,
+            runs: 200,
           },
         },
       },
       {
-        version: "0.8.0",
+        version: "0.8.1",
         settings: {
           optimizer: {
             enabled: true,
-            runs: 7500,
+            runs: 200,
+          },
+        },
+      },
+      {
+        version: "0.8.17",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
           },
         },
       },
     ],
     overrides: {
-      "contracts/balancer-core-v2/vault/Vault.sol": {
+      "contracts/balancer-core-v2/contracts/contracts/vault/Vault.sol": {
         version: "0.7.1",
         settings: {
           optimizer: {
@@ -48,16 +51,17 @@ const config: HardhatUserConfig = {
           },
         },
       },
-      "contracts/balancer-core-v2/pools/weighted/WeightedPoolFactory.sol": {
-        version: "0.7.1",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 800,
+      "contracts/balancer-core-v2/contracts/pools/weighted/WeightedPoolFactory.sol":
+        {
+          version: "0.7.1",
+          settings: {
+            optimizer: {
+              enabled: true,
+              runs: 800,
+            },
           },
         },
-      },
-      "contracts/balancer-core-v2/pools/weighted/WeightedPool2TokensFactory.sol":
+      "contracts/balancer-core-v2/contracts/pools/weighted/WeightedPool2TokensFactory.sol":
         {
           version: "0.7.1",
           settings: {

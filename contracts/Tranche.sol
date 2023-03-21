@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "./interfaces/IERC20.sol";
 import "./interfaces/IWrappedPosition.sol";
@@ -136,11 +136,10 @@ contract Tranche is ERC20Permit, ITranche {
     @param _destination The address to mint to
     @return The amount of principal and yield token minted as (pt, yt)
      */
-    function deposit(uint256 _amount, address _destination)
-        external
-        override
-        returns (uint256, uint256)
-    {
+    function deposit(
+        uint256 _amount,
+        address _destination
+    ) external override returns (uint256, uint256) {
         // Transfer the underlying to be wrapped into the position
         underlying.transferFrom(msg.sender, address(position), _amount);
         // Now that we have funded the deposit we can call
@@ -156,11 +155,9 @@ contract Tranche is ERC20Permit, ITranche {
     /// @return the amount of principal and yield token minted as (pt, yt)
     /// @dev WARNING - The call which funds this method MUST be in the same transaction
     //                 as the call to this method or you risk loss of funds
-    function prefundedDeposit(address _destination)
-        public
-        override
-        returns (uint256, uint256)
-    {
+    function prefundedDeposit(
+        address _destination
+    ) public override returns (uint256, uint256) {
         // We check that this it is possible to deposit
         require(block.timestamp < unlockTimestamp, "expired");
         // Since the wrapped position contract holds a balance we use the prefunded deposit method
@@ -226,11 +223,10 @@ contract Tranche is ERC20Permit, ITranche {
          numerical error on each redemption so each principal token may occasionally redeem
          for less than 1 unit of underlying. Max loss defaults to 0.1 BP ie 0.001% loss
      */
-    function withdrawPrincipal(uint256 _amount, address _destination)
-        external
-        override
-        returns (uint256)
-    {
+    function withdrawPrincipal(
+        uint256 _amount,
+        address _destination
+    ) external override returns (uint256) {
         // No redemptions before unlock
         require(block.timestamp >= unlockTimestamp, "E:Not Expired");
         // If the speedbump == 0 it's never been hit so we don't need
@@ -323,11 +319,10 @@ contract Tranche is ERC20Permit, ITranche {
     @dev Due to slippage the redemption may receive up to _SLIPPAGE_BP less
          in output compared to the floating rate.
      */
-    function withdrawInterest(uint256 _amount, address _destination)
-        external
-        override
-        returns (uint256)
-    {
+    function withdrawInterest(
+        uint256 _amount,
+        address _destination
+    ) external override returns (uint256) {
         require(block.timestamp >= unlockTimestamp, "E:Not Expired");
         // Burn tokens from the sender
         interestToken.burn(msg.sender, _amount);

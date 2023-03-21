@@ -3,7 +3,7 @@ pragma solidity ^0.7.0;
 pragma experimental ABIEncoderV2;
 
 import "../ConvergentCurvePool.sol";
-import "../balancer-core-v2/lib/math/FixedPoint.sol";
+import "../balancer-core-v2/contracts/lib/math/FixedPoint.sol";
 
 contract TestConvergentCurvePool is ConvergentCurvePool {
     using FixedPoint for uint256;
@@ -152,20 +152,18 @@ contract TestConvergentCurvePool is ConvergentCurvePool {
     }
 
     // Public interface to test '_tokenToFixed'
-    function tokenToFixed(uint256 amount, IERC20 token)
-        public
-        view
-        returns (uint256)
-    {
+    function tokenToFixed(
+        uint256 amount,
+        IERC20 token
+    ) public view returns (uint256) {
         return _tokenToFixed(amount, token);
     }
 
     // Public interface to test '_fixedToToken'
-    function fixedToToken(uint256 amount, IERC20 token)
-        public
-        view
-        returns (uint256)
-    {
+    function fixedToToken(
+        uint256 amount,
+        IERC20 token
+    ) public view returns (uint256) {
         return _fixedToToken(amount, token);
     }
 

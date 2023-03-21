@@ -3,11 +3,11 @@ pragma solidity ^0.7.0;
 pragma experimental ABIEncoderV2;
 
 import "./interfaces/IERC20Decimals.sol";
-import "./balancer-core-v2/lib/math/LogExpMath.sol";
-import "./balancer-core-v2/lib/math/FixedPoint.sol";
-import "./balancer-core-v2/vault/interfaces/IMinimalSwapInfoPool.sol";
-import "./balancer-core-v2/vault/interfaces/IVault.sol";
-import "./balancer-core-v2/pools/BalancerPoolToken.sol";
+import "./balancer-core-v2/contracts/lib/math/LogExpMath.sol";
+import "./balancer-core-v2/contracts/lib/math/FixedPoint.sol";
+import "./balancer-core-v2/contracts/vault/interfaces/IMinimalSwapInfoPool.sol";
+import "./balancer-core-v2/contracts/vault/interfaces/IVault.sol";
+import "./balancer-core-v2/contracts/pools/BalancerPoolToken.sol";
 
 // SECURITY - A governance address can freeze trading and deposits but has no access to user funds
 //            and cannot stop withdraws.
@@ -365,11 +365,9 @@ contract ConvergentCurvePool is IMinimalSwapInfoPool, BalancerPoolToken {
 
     /// @dev Returns the balances so that they'll be in the order [underlying, bond].
     /// @param currentBalances balances sorted low to high of address value.
-    function _getSortedBalances(uint256[] memory currentBalances)
-        internal
-        view
-        returns (uint256 underlyingBalance, uint256 bondBalance)
-    {
+    function _getSortedBalances(
+        uint256[] memory currentBalances
+    ) internal view returns (uint256 underlyingBalance, uint256 bondBalance) {
         return (currentBalances[baseIndex], currentBalances[bondIndex]);
     }
 
@@ -682,11 +680,10 @@ contract ConvergentCurvePool is IMinimalSwapInfoPool, BalancerPoolToken {
     /// @param amount The amount of the token in native decimal encoding
     /// @param token The address of the token
     /// @return The amount of token encoded into 18 point fixed point
-    function _tokenToFixed(uint256 amount, IERC20 token)
-        internal
-        view
-        returns (uint256)
-    {
+    function _tokenToFixed(
+        uint256 amount,
+        IERC20 token
+    ) internal view returns (uint256) {
         // In both cases we are targeting 18 point
         if (token == underlying) {
             return _normalize(amount, underlyingDecimals, 18);
@@ -702,11 +699,10 @@ contract ConvergentCurvePool is IMinimalSwapInfoPool, BalancerPoolToken {
     /// @param amount The amount of the token in 18 decimal fixed point
     /// @param token The address of the token
     /// @return The amount of token encoded in native decimal point
-    function _fixedToToken(uint256 amount, IERC20 token)
-        internal
-        view
-        returns (uint256)
-    {
+    function _fixedToToken(
+        uint256 amount,
+        IERC20 token
+    ) internal view returns (uint256) {
         if (token == underlying) {
             // Recodes to 'underlyingDecimals' decimals
             return _normalize(amount, 18, underlyingDecimals);
@@ -731,11 +727,11 @@ contract ConvergentCurvePool is IMinimalSwapInfoPool, BalancerPoolToken {
         // If we need to increase the decimals
         if (decimalsBefore > decimalsAfter) {
             // Then we shift right the amount by the number of decimals
-            amount = amount / 10**(decimalsBefore - decimalsAfter);
+            amount = amount / 10 ** (decimalsBefore - decimalsAfter);
             // If we need to decrease the number
         } else if (decimalsBefore < decimalsAfter) {
             // then we shift left by the difference
-            amount = amount * 10**(decimalsAfter - decimalsBefore);
+            amount = amount * 10 ** (decimalsAfter - decimalsBefore);
         }
         // If nothing changed this is a no-op
         return amount;

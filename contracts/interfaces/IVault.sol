@@ -1,4 +1,4 @@
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "./IAsset.sol";
 
@@ -39,8 +39,7 @@ interface IVault {
         uint256 deadline
     ) external payable returns (uint256);
 
-    function getPool(bytes32 poolId)
-        external
-        view
-        returns (address, PoolSpecialization);
+    function getPool(
+        bytes32 poolId
+    ) external view returns (address, PoolSpecialization);
 }

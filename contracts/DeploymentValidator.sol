@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "./libraries/Authorizable.sol";
 import "./interfaces/IDeploymentValidator.sol";
@@ -22,11 +22,9 @@ contract DeploymentValidator is IDeploymentValidator, Authorizable {
 
     /// @notice adds a wrapped position address to the mapping
     /// @param wrappedPosition The wrapped position contract address
-    function validateWPAddress(address wrappedPosition)
-        public
-        override
-        onlyAuthorized
-    {
+    function validateWPAddress(
+        address wrappedPosition
+    ) public override onlyAuthorized {
         // add address to mapping to indicating it was deployed by Element
         wrappedPositions[wrappedPosition] = true;
     }
@@ -41,11 +39,10 @@ contract DeploymentValidator is IDeploymentValidator, Authorizable {
     /// @notice adds a wrapped position + pool pair of addresses to mapping
     /// @param wrappedPosition the wrapped position contract address
     /// @param pool the pool contract address
-    function validateAddresses(address wrappedPosition, address pool)
-        external
-        override
-        onlyAuthorized
-    {
+    function validateAddresses(
+        address wrappedPosition,
+        address pool
+    ) external override onlyAuthorized {
         // add to pool validation mapping
         validatePoolAddress(pool);
         // add to wp validation mapping
@@ -59,24 +56,18 @@ contract DeploymentValidator is IDeploymentValidator, Authorizable {
     /// @notice checks to see if the address has been validated
     /// @param wrappedPosition the address to check
     /// @return true if validated, false if not
-    function checkWPValidation(address wrappedPosition)
-        external
-        view
-        override
-        returns (bool)
-    {
+    function checkWPValidation(
+        address wrappedPosition
+    ) external view override returns (bool) {
         return wrappedPositions[wrappedPosition];
     }
 
     /// @notice checks to see if the address has been validated
     /// @param pool the address to check
     /// @return true if validated, false if not
-    function checkPoolValidation(address pool)
-        external
-        view
-        override
-        returns (bool)
-    {
+    function checkPoolValidation(
+        address pool
+    ) external view override returns (bool) {
         return pools[pool];
     }
 
@@ -84,12 +75,10 @@ contract DeploymentValidator is IDeploymentValidator, Authorizable {
     /// @param wrappedPosition the wrapped position address to check
     /// @param pool the pool address to check
     /// @return true if validated, false if not
-    function checkPairValidation(address wrappedPosition, address pool)
-        external
-        view
-        override
-        returns (bool)
-    {
+    function checkPairValidation(
+        address wrappedPosition,
+        address pool
+    ) external view override returns (bool) {
         bytes32 data = keccak256(abi.encodePacked(wrappedPosition, pool));
         return pairs[data];
     }

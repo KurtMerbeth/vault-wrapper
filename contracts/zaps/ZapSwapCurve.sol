@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity 0.8.0;
+pragma solidity 0.8.1;
 
 import "../libraries/Authorizable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/draft-IERC20Permit.sol";
@@ -304,10 +304,10 @@ contract ZapSwapCurve is Authorizable, ReentrancyGuard {
     /// zap and childZap and also makes the transition from a dynamic-length
     /// array to a fixed-length which is required for the actual call to add
     /// liquidity to the curvePool
-    function _zapCurveLpIn(ZapCurveLpIn memory _zap, uint256[3] memory _ctx)
-        internal
-        returns (uint256)
-    {
+    function _zapCurveLpIn(
+        ZapCurveLpIn memory _zap,
+        uint256[3] memory _ctx
+    ) internal returns (uint256) {
         // All curvePools have either 2 or 3 "root" tokens
         require(
             _zap.amounts.length == 2 || _zap.amounts.length == 3,

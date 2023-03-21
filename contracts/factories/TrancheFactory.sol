@@ -6,7 +6,7 @@ import "../interfaces/IERC20.sol";
 import "../interfaces/IInterestTokenFactory.sol";
 import "../interfaces/IInterestToken.sol";
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 /// @author Element Finance
 /// @title Tranche Factory
@@ -41,10 +41,10 @@ contract TrancheFactory {
     /// @param _expiration The expiration timestamp for the tranche.
     /// @param _wpAddress Address of the Wrapped Position contract the tranche will use.
     /// @return The deployed Tranche contract.
-    function deployTranche(uint256 _expiration, address _wpAddress)
-        public
-        returns (Tranche)
-    {
+    function deployTranche(
+        uint256 _expiration,
+        address _wpAddress
+    ) public returns (Tranche) {
         _tempWpAddress = _wpAddress;
         _tempExpiration = _expiration;
 
@@ -101,12 +101,7 @@ contract TrancheFactory {
     function getData()
         external
         view
-        returns (
-            address,
-            uint256,
-            IInterestToken,
-            address
-        )
+        returns (address, uint256, IInterestToken, address)
     {
         return (
             _tempWpAddress,

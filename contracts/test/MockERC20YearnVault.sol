@@ -1,4 +1,4 @@
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 import "../interfaces/IYearnVault.sol";
 import "../libraries/Authorizable.sol";
 import "../libraries/ERC20Permit.sol";
@@ -25,14 +25,13 @@ contract MockERC20YearnVault is IYearnVault, Authorizable, ERC20Permit {
     /**
     @param _token The ERC20 token the vault accepts
      */
-    constructor(address _token)
-        Authorizable()
-        ERC20Permit("Mock Yearn Vault", "MYV")
-    {
+    constructor(
+        address _token
+    ) Authorizable() ERC20Permit("Mock Yearn Vault", "MYV") {
         _authorize(msg.sender);
         token = ERC20Permit(_token);
         decimals = token.decimals();
-        precisionFactor = 10**(18 - decimals);
+        precisionFactor = 10 ** (18 - decimals);
         // 6 hours in blocks
         // 6*60*60 ~= 1e6 / 46
         lockedProfitDegradation = (DEGRADATION_COEFFICIENT * 46) / 1e6;
@@ -64,11 +63,10 @@ contract MockERC20YearnVault is IYearnVault, Authorizable, ERC20Permit {
     @return The vault shares received.
 
      */
-    function deposit(uint256 _amount, address _recipient)
-        external
-        override
-        returns (uint256)
-    {
+    function deposit(
+        uint256 _amount,
+        address _recipient
+    ) external override returns (uint256) {
         require(_amount > 0, "depositing 0 value");
         uint256 shares = _issueSharesForAmount(_recipient, _amount);
         token.transferFrom(msg.sender, address(this), _amount);
@@ -103,7 +101,7 @@ contract MockERC20YearnVault is IYearnVault, Authorizable, ERC20Permit {
     @notice Returns the amount of underlying per each unit [10^decimals] of yearn shares
      */
     function pricePerShare() public view override returns (uint256) {
-        return _shareValue(10**decimals);
+        return _shareValue(10 ** decimals);
     }
 
     /**
@@ -136,10 +134,10 @@ contract MockERC20YearnVault is IYearnVault, Authorizable, ERC20Permit {
     @param _amount The amount of underlying tokens to convert to shares.
     @return The amount of shares _amount yields.
      */
-    function _issueSharesForAmount(address _to, uint256 _amount)
-        internal
-        returns (uint256)
-    {
+    function _issueSharesForAmount(
+        address _to,
+        uint256 _amount
+    ) internal returns (uint256) {
         uint256 shares;
         if (totalShares > 0) {
             shares =

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "../interfaces/IERC20.sol";
 import "../interfaces/IYearnVault.sol";
@@ -12,22 +12,23 @@ import "./TestERC20.sol";
 contract TestYVault is ERC20PermitWithSupply {
     address public token;
 
-    constructor(address _token, uint8 _decimals)
-        ERC20Permit("test ytoken", "yToken")
-    {
+    constructor(
+        address _token,
+        uint8 _decimals
+    ) ERC20Permit("test ytoken", "yToken") {
         token = _token;
         _setupDecimals(_decimals);
     }
 
-    function deposit(uint256 _amount, address destination)
-        external
-        returns (uint256)
-    {
+    function deposit(
+        uint256 _amount,
+        address destination
+    ) external returns (uint256) {
         uint256 _shares;
         if (totalSupply == 0) {
             _shares = _amount;
         } else {
-            _shares = (_amount * (10**decimals)) / pricePerShare(); // calculate shares
+            _shares = (_amount * (10 ** decimals)) / pricePerShare(); // calculate shares
         }
         IERC20(token).transferFrom(msg.sender, address(this), _amount); // pull deposit from sender
         _mint(destination, _shares); // mint shares for sender
@@ -47,7 +48,7 @@ contract TestYVault is ERC20PermitWithSupply {
         if (_shares == type(uint256).max) {
             _shares = balanceOf[msg.sender];
         }
-        uint256 _amount = (_shares * pricePerShare()) / (10**decimals);
+        uint256 _amount = (_shares * pricePerShare()) / (10 ** decimals);
         _burn(msg.sender, _shares);
         IERC20(token).transfer(destination, _amount);
         return _amount;
@@ -55,8 +56,8 @@ contract TestYVault is ERC20PermitWithSupply {
 
     function pricePerShare() public view returns (uint256) {
         uint256 balance = ERC20Permit(token).balanceOf(address(this));
-        if (balance == 0) return (10**decimals);
-        return (balance * (10**decimals)) / totalSupply;
+        if (balance == 0) return (10 ** decimals);
+        return (balance * (10 ** decimals)) / totalSupply;
     }
 
     function updateShares() external {
