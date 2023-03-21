@@ -4,7 +4,7 @@ pragma solidity ^0.8.1;
 import "./YVaultAssetProxy.sol";
 
 contract ExtendedYVaultAssetProxy is YVaultAssetProxy {
-    uint256 public constant FEE_DOMINATOR = 1e18;
+    uint256 public constant FEE_DENOMINATOR = 1e18;
     uint256 public fee;
     address public feeRecipient;
 
@@ -33,7 +33,7 @@ contract ExtendedYVaultAssetProxy is YVaultAssetProxy {
         if (underlyingBalance > balanceSnapshot) {
             accruedInterest = underlyingBalance - balanceSnapshot;
 
-            uint256 feeAmount = (accruedInterest * fee) / FEE_DOMINATOR;
+            uint256 feeAmount = (accruedInterest * fee) / FEE_DENOMINATOR;
             uint256 feeInShares = feeAmount / _pricePerShare();
 
             // mint fee shares to fee recipient
@@ -85,7 +85,7 @@ contract ExtendedYVaultAssetProxy is YVaultAssetProxy {
     }
 
     function setFee(uint256 _fee) external onlyOwner {
-        require(_fee <= FEE_DOMINATOR, "Fee cannot be greater than 100%");
+        require(_fee <= FEE_DENOMINATOR, "Fee cannot be greater than 100%");
         fee = _fee;
         emit FeeSet(_fee);
     }
